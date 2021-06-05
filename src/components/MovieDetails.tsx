@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {FlatList, Text, View} from 'react-native';
 import currencyFormatter from 'currency-formatter';
 import {MovieFull} from '../interfaces/movieInterface';
 import {Cast} from '../interfaces/creditsInterface';
@@ -29,16 +29,15 @@ const MovieDetails = ({movieFull, cast}: Props) => {
           Historia
         </Text>
         <Text style={{fontSize: 16}}>{movieFull.overview}</Text>
+
+        {/* Presupuesto */}
+        <Text style={{fontSize: 23, marginTop: 10, fontWeight: 'bold'}}>
+          Presupuesto
+        </Text>
+        <Text style={{fontSize: 18}}>
+          {currencyFormatter.format(movieFull.budget, {code: 'USD'})}
+        </Text>
       </View>
-
-      {/* Historia */}
-      <Text style={{fontSize: 23, marginTop: 10, fontWeight: 'bold'}}>
-        Presupuesto
-      </Text>
-      <Text style={{fontSize: 18}}>
-        {currencyFormatter.format(movieFull.budget, {code: 'USD'})}
-      </Text>
-
       {/* Casting */}
       <View style={{marginTop: 10, marginBottom: 100}}>
         <Text
@@ -50,7 +49,15 @@ const MovieDetails = ({movieFull, cast}: Props) => {
           }}>
           Actores
         </Text>
-        <CastItem actor={cast[0]} />
+
+        <FlatList
+          data={cast}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => <CastItem actor={item} />}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{marginTop: 10, height: 70}}
+        />
       </View>
     </>
   );
